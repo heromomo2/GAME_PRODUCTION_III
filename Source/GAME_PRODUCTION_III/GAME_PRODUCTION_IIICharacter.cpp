@@ -6,6 +6,7 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Engine/GameEngine.h"// i add this header
 
 AGAME_PRODUCTION_IIICharacter::AGAME_PRODUCTION_IIICharacter()
 {
@@ -51,12 +52,21 @@ AGAME_PRODUCTION_IIICharacter::AGAME_PRODUCTION_IIICharacter()
 void AGAME_PRODUCTION_IIICharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// set up gameplay key bindings
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump); 
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGAME_PRODUCTION_IIICharacter::MoveRight);
-
+	PlayerInputComponent->BindAction("Pepper", IE_Pressed, this, &AGAME_PRODUCTION_IIICharacter::Pepper);// pepper
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AGAME_PRODUCTION_IIICharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &AGAME_PRODUCTION_IIICharacter::TouchStopped);
+}
+
+void AGAME_PRODUCTION_IIICharacter::Pepper()
+{
+	// add movement in that direction
+
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("YOU HAVE THROWN PEPPER"));
+	
 }
 
 void AGAME_PRODUCTION_IIICharacter::MoveRight(float Value)

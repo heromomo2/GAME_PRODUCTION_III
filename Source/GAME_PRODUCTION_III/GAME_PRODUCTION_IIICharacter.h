@@ -20,6 +20,8 @@ class AGAME_PRODUCTION_IIICharacter : public ACharacter
 	//class USpringArmComponent* CameraBoom;
 
 protected:
+	/* called for Pepper*/
+	void Pepper();
 
 	/** Called for side to side input */
 	void MoveRight(float Val);
