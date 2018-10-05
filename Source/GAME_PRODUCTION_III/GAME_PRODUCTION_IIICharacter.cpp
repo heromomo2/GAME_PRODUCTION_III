@@ -55,12 +55,13 @@ void AGAME_PRODUCTION_IIICharacter::SetupPlayerInputComponent(class UInputCompon
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump); 
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGAME_PRODUCTION_IIICharacter::MoveRight);
+	PlayerInputComponent->BindAxis("MoveUp", this, &AGAME_PRODUCTION_IIICharacter::MoveUp);// up and down
 	PlayerInputComponent->BindAction("Pepper", IE_Pressed, this, &AGAME_PRODUCTION_IIICharacter::Pepper);// pepper
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AGAME_PRODUCTION_IIICharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &AGAME_PRODUCTION_IIICharacter::TouchStopped);
 }
 
-void AGAME_PRODUCTION_IIICharacter::Pepper()
+void AGAME_PRODUCTION_IIICharacter::Pepper()//Pepper
 {
 	// add movement in that direction
 
@@ -69,6 +70,11 @@ void AGAME_PRODUCTION_IIICharacter::Pepper()
 	
 }
 
+void AGAME_PRODUCTION_IIICharacter::MoveUp(float Value)
+{
+	// add movement in that direction
+	AddMovementInput(FVector(0.f, 0.f, -1.f), Value);
+}
 void AGAME_PRODUCTION_IIICharacter::MoveRight(float Value)
 {
 	// add movement in that direction

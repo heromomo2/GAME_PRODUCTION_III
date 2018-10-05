@@ -26,6 +26,9 @@ protected:
 	/** Called for side to side input */
 	void MoveRight(float Val);
 
+	/** Called for Move up and down input */
+	void MoveUp(float Val);
+
 	/** Handle touch inputs. */
 	void TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location);
 
