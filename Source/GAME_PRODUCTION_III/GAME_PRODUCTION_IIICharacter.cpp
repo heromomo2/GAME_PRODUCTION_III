@@ -35,7 +35,7 @@ AGAME_PRODUCTION_IIICharacter::AGAME_PRODUCTION_IIICharacter()
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Face in the direction we are moving..
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f); // ...at this rotation rate
-	GetCharacterMovement()->GravityScale = 2.f;
+	//GetCharacterMovement()->GravityScale = 2.f;
 	GetCharacterMovement()->AirControl = 0.80f;
 	GetCharacterMovement()->JumpZVelocity = 1000.f;
 	GetCharacterMovement()->GroundFriction = 3.f;
@@ -52,10 +52,10 @@ AGAME_PRODUCTION_IIICharacter::AGAME_PRODUCTION_IIICharacter()
 void AGAME_PRODUCTION_IIICharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// set up gameplay key bindings
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump); 
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+//	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump); 
+//	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGAME_PRODUCTION_IIICharacter::MoveRight);
-	PlayerInputComponent->BindAxis("MoveUp", this, &AGAME_PRODUCTION_IIICharacter::MoveUp);// up and down
+	PlayerInputComponent->BindAxis("MoveUpward", this, &AGAME_PRODUCTION_IIICharacter::MoveUpward);// up and down
 	PlayerInputComponent->BindAction("Pepper", IE_Pressed, this, &AGAME_PRODUCTION_IIICharacter::Pepper);// pepper
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AGAME_PRODUCTION_IIICharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &AGAME_PRODUCTION_IIICharacter::TouchStopped);
@@ -64,16 +64,19 @@ void AGAME_PRODUCTION_IIICharacter::SetupPlayerInputComponent(class UInputCompon
 void AGAME_PRODUCTION_IIICharacter::Pepper()//Pepper
 {
 	// add movement in that direction
-
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("YOU HAVE THROWN PEPPER"));
-	
 }
 
-void AGAME_PRODUCTION_IIICharacter::MoveUp(float Value)
+void AGAME_PRODUCTION_IIICharacter::MoveUpward(float Val)
 {
+		
 	// add movement in that direction
-	AddMovementInput(FVector(0.f, 0.f, -1.f), Value);
+	//FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Z);
+	//AddMovementInput(FVector(Direction), Value);
+	//AddMovementInput(FVector(0.f, 0.f, -1.0f), Value);
+ 	/*if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("MoveForward is becalling"));*/
 }
 void AGAME_PRODUCTION_IIICharacter::MoveRight(float Value)
 {
@@ -84,11 +87,11 @@ void AGAME_PRODUCTION_IIICharacter::MoveRight(float Value)
 void AGAME_PRODUCTION_IIICharacter::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
 	// jump on any touch
-	Jump();
+	//Jump();
 }
 
 void AGAME_PRODUCTION_IIICharacter::TouchStopped(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
-	StopJumping();
+	//StopJumping();
 }
 
