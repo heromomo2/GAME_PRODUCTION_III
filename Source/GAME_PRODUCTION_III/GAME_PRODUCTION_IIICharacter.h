@@ -27,7 +27,7 @@ protected:
 	void MoveRight(float Val);
 
 	/** Called for Move up and down input */
-	void MoveUpward(float Val);
+	void MoveUpward(float DeltaTime);
 
 	/** Handle touch inputs. */
 	void TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location);
@@ -39,6 +39,7 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 	// End of APawn interface
 
+	//bool bImGoingUp = true;
 
 public:
 	AGAME_PRODUCTION_IIICharacter();

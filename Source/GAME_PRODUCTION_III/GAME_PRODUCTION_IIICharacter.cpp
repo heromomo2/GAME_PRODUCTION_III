@@ -35,7 +35,7 @@ AGAME_PRODUCTION_IIICharacter::AGAME_PRODUCTION_IIICharacter()
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Face in the direction we are moving..
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f); // ...at this rotation rate
-	//GetCharacterMovement()->GravityScale = 2.f;
+	GetCharacterMovement()->GravityScale = 0.0f;
 	GetCharacterMovement()->AirControl = 0.80f;
 	GetCharacterMovement()->JumpZVelocity = 1000.f;
 	GetCharacterMovement()->GroundFriction = 3.f;
@@ -68,13 +68,16 @@ void AGAME_PRODUCTION_IIICharacter::Pepper()//Pepper
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("YOU HAVE THROWN PEPPER"));
 }
 
-void AGAME_PRODUCTION_IIICharacter::MoveUpward(float Val)
-{
-		
+void AGAME_PRODUCTION_IIICharacter::MoveUpward(float DeltaTime)
+{	
+	Super::Tick(DeltaTime);
+	FVector NewLocation = GetActorLocation();
+	NewLocation.Z -= (DeltaTime * 3.f);
+	SetActorLocation(NewLocation);
 	// add movement in that direction
 	//FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Z);
 	//AddMovementInput(FVector(Direction), Value);
-	//AddMovementInput(FVector(0.f, 0.f, -1.0f), Value);
+	//AddMovementInput(FVector(0.f, 0.f, -1.f), Val);
  	/*if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("MoveForward is becalling"));*/
 }
