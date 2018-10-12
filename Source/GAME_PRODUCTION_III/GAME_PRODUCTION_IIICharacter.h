@@ -39,7 +39,7 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 	// End of APawn interface
 
-	//bool bImGoingUp = true;
+	bool IsOnLadder = false;
 
 public:
 	AGAME_PRODUCTION_IIICharacter();
@@ -48,4 +48,5 @@ public:
 	//FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
 	/** Returns CameraBoom subobject **/
 	//FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	virtual void NotifyActorBeginOverlap(AActor*OtherActer)override;
 };
