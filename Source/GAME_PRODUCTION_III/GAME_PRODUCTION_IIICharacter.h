@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GAME_PRODUCTION_IIICharacter.generated.h"
 
 UCLASS(config=Game)
@@ -39,7 +40,22 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 	// End of APawn interface
 
+	/// bool is see player is on the ladder
 	bool IsOnLadder = false;
+
+	// enum  movement of mode 
+	enum EMovementMode1
+	{
+		MOVE_None,
+		MOVE_Walking,
+		MOVE_NavWalking,
+		MOVE_Falling,
+		MOVE_Swimming,
+		MOVE_Flying,
+		MOVE_Custom,
+		MOVE_MAX,
+	};
+
 
 public:
 	AGAME_PRODUCTION_IIICharacter();
@@ -49,4 +65,7 @@ public:
 	/** Returns CameraBoom subobject **/
 	//FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	virtual void NotifyActorBeginOverlap(AActor*OtherActer)override;
+	virtual void NotifyActorEndOverlap(AActor*OtherActer)override;
+	virtual void SetMovementMode(EMovementMode);
+	
 };

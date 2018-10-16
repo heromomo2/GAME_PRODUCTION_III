@@ -69,15 +69,14 @@ void AGAME_PRODUCTION_IIICharacter::Pepper()//Pepper
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("YOU HAVE THROWN PEPPER"));
 }
 void AGAME_PRODUCTION_IIICharacter::MoveUpward(float DeltaTime)
-{ //if(IsOnLadder == true)
-	//{
-	FVector NewLocation = GetActorLocation();
-	NewLocation.Z += (DeltaTime * 20.f);
-	SetActorLocation(NewLocation);
-
+{ if(IsOnLadder == true)
+	{
+	  FVector NewLocation = GetActorLocation();
+	  NewLocation.Z += (DeltaTime * 10.f);
+	  SetActorLocation(NewLocation);
 	//if (GEngine)
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("MoveForward is becalling")); 
-    //}
+    }
 	// add movement in that direction
 	//FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Z);
 	//AddMovementInput(FVector(Direction), Value);
@@ -107,6 +106,14 @@ void AGAME_PRODUCTION_IIICharacter::TouchStopped(const ETouchIndex::Type FingerI
 void AGAME_PRODUCTION_IIICharacter::NotifyActorBeginOverlap(AActor*OtherActor)
 {
 	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("overlap happen"));
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("overlap begin happen"));
 	IsOnLadder = true;
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);// set to flying  mode
+}
+void AGAME_PRODUCTION_IIICharacter::NotifyActorEndOverlap(AActor*OtherActor)
+{
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("overlap end happen"));
+	IsOnLadder = false;
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);// set to walking mode
 }
