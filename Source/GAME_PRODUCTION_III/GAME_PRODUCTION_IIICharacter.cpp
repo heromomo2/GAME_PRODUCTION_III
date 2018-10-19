@@ -71,9 +71,11 @@ void AGAME_PRODUCTION_IIICharacter::Pepper()//Pepper
 void AGAME_PRODUCTION_IIICharacter::MoveUpward(float DeltaTime)
 { if(IsOnLadder == true)
 	{
-	  FVector NewLocation = GetActorLocation();
-	  NewLocation.Z += (DeltaTime * 10.f);
-	  SetActorLocation(NewLocation);
+	  //FVector NewLocation = GetActorLocation();
+	 // NewLocation.Z += (DeltaTime * 10.f);
+	 // SetActorLocation(NewLocation);
+
+	AddMovementInput(FVector::UpVector * DeltaTime);
 	//if (GEngine)
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("MoveForward is becalling")); 
     }
@@ -87,7 +89,10 @@ void AGAME_PRODUCTION_IIICharacter::MoveUpward(float DeltaTime)
 void AGAME_PRODUCTION_IIICharacter::MoveRight(float Value)
 {
 	// add movement in that direction
-	AddMovementInput(FVector(0.f,-1.f,0.f), Value);
+
+	if ( !IsOnLadder && IsLeaveingLadder ) {
+		AddMovementInput(FVector(0.f, -1.f, 0.f), Value);
+	}
 }
 
 void AGAME_PRODUCTION_IIICharacter::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location)
@@ -105,15 +110,42 @@ void AGAME_PRODUCTION_IIICharacter::TouchStopped(const ETouchIndex::Type FingerI
 
 void AGAME_PRODUCTION_IIICharacter::NotifyActorBeginOverlap(AActor*OtherActor)
 {
+	// eneter the ladder
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("overlap begin happen"));
 	IsOnLadder = true;
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);// set to flying  mode
+	/* enter for the first time
+	  switch (IsLeaveingLadder) should be case false
+	  case true:
+	  IsLeaveingLadder = false  // //you can't move side to side
+	  break;
+	  case false:
+	  IsLeaveingLadder = true // you can move side to side
+	  break;
+
+	  enter for the 2 time
+	  switch (IsLeaveingLadder) should be case false
+	  case true:
+	  IsLeaveingLadder = false////you can't move side to side
+	  break;
+	  case false:
+	  IsLeaveingLadder = true // you can move side to side
+	  break;
+	
+	
+	
+	*/
 }
 void AGAME_PRODUCTION_IIICharacter::NotifyActorEndOverlap(AActor*OtherActor)
 {
+	// leave the ladder
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("overlap end happen"));
 	IsOnLadder = false;
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);// set to walking mode
+
+	
+	
+	
 }

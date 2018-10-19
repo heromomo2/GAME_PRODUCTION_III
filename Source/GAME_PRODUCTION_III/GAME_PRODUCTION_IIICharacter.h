@@ -43,8 +43,11 @@ protected:
 	/// bool is see player is on the ladder
 	bool IsOnLadder = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool IsLeaveingLadder = true;
+
 	// enum  movement of mode 
-	enum EMovementMode1
+	/*enum EMovementMode1
 	{
 		MOVE_None,
 		MOVE_Walking,
@@ -54,7 +57,7 @@ protected:
 		MOVE_Flying,
 		MOVE_Custom,
 		MOVE_MAX,
-	};
+	};*/
 
 
 public:
@@ -66,6 +69,6 @@ public:
 	//FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	virtual void NotifyActorBeginOverlap(AActor*OtherActer)override;
 	virtual void NotifyActorEndOverlap(AActor*OtherActer)override;
-	virtual void SetMovementMode(EMovementMode);
+	//virtual void SetMovementMode(EMovementMode);
 	
 };
