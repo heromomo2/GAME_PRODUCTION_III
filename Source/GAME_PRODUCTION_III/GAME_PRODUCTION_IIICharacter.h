@@ -25,10 +25,10 @@ protected:
 	void Pepper();
 
 	/** Called for side to side input */
-	void MoveRight(float Val);
+	void MoveRight(float value);
 
 	/** Called for Move up and down input */
-	void MoveUpward(float DeltaTime);
+	void MoveUpward(float value);
 
 	/** Handle touch inputs. */
 	void TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location);
@@ -41,10 +41,13 @@ protected:
 	// End of APawn interface
 
 	/// bool is see player is on the ladder
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool IsOnLadder = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool IsLeaveingLadder = true;
+	bool IsLeaveingLadder = false;
+
+	FString name;
 
 	// enum  movement of mode 
 	/*enum EMovementMode1

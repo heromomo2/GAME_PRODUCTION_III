@@ -8,6 +8,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Engine/GameEngine.h"// i add this header
 
+#include "Ladder.h"
+
 AGAME_PRODUCTION_IIICharacter::AGAME_PRODUCTION_IIICharacter()
 {
 	// Set size for collision capsule
@@ -36,8 +38,8 @@ AGAME_PRODUCTION_IIICharacter::AGAME_PRODUCTION_IIICharacter()
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Face in the direction we are moving..
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f); // ...at this rotation rate
-	GetCharacterMovement()->GravityScale = 0.0f;
-	GetCharacterMovement()->AirControl = 0.80f;
+	GetCharacterMovement()->GravityScale = 5.0f;
+	GetCharacterMovement()->AirControl = 0.5f;
 	GetCharacterMovement()->JumpZVelocity = 1000.f;
 	GetCharacterMovement()->GroundFriction = 3.f;
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;
@@ -68,21 +70,26 @@ void AGAME_PRODUCTION_IIICharacter::Pepper()//Pepper
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("YOU HAVE THROWN PEPPER"));
 }
-void AGAME_PRODUCTION_IIICharacter::MoveUpward(float DeltaTime)
-{ if(IsOnLadder == true)
+void AGAME_PRODUCTION_IIICharacter::MoveUpward(float value)
+{
+	 if(IsOnLadder)
 	{
 	  //FVector NewLocation = GetActorLocation();
 	 // NewLocation.Z += (DeltaTime * 10.f);
 	 // SetActorLocation(NewLocation);
-
-	AddMovementInput(FVector::UpVector * DeltaTime);
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);// set to flying  mode
+	AddMovementInput(FVector::UpVector * value);
 	//if (GEngine)
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("MoveForward is becalling")); 
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT(" you are flying")); 
+
     }
-	// add movement in that direction
-	//FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Z);
-	//AddMovementInput(FVector(Direction), Value);
-	//AddMovementInput(FVector(0.f, 0.f, -1.f), Val);
+ //  else  
+ //   {
+	//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);// set to walking mode	
+	////if (GEngine)
+	////GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT(" you are walking"));
+ //   }
+	
  	/*if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("MoveForward is becalling"));*/
 }
@@ -90,9 +97,16 @@ void AGAME_PRODUCTION_IIICharacter::MoveRight(float Value)
 {
 	// add movement in that direction
 
-	if ( !IsOnLadder && IsLeaveingLadder ) {
-		AddMovementInput(FVector(0.f, -1.f, 0.f), Value);
+	if ( !IsOnLadder || IsLeaveingLadder ) {
+		//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);// set to walking mode	
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);// set to walking mode	
+		AddMovementInput(FVector::RightVector* Value);
 	}
+	//else
+	//{
+	//	
+	//}
+
 }
 
 void AGAME_PRODUCTION_IIICharacter::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location)
@@ -111,10 +125,17 @@ void AGAME_PRODUCTION_IIICharacter::TouchStopped(const ETouchIndex::Type FingerI
 void AGAME_PRODUCTION_IIICharacter::NotifyActorBeginOverlap(AActor*OtherActor)
 {
 	// eneter the ladder
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("overlap begin happen"));
-	IsOnLadder = true;
-	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);// set to flying  mode
+	name = OtherActor->GetName();
+	if (OtherActor->IsA<ALadder>())//name.Contains("Ladder")) 
+	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, name);
+		}
+		IsOnLadder = true;
+	}
+
+
 	/* enter for the first time
 	  switch (IsLeaveingLadder) should be case false
 	  case true:
@@ -132,20 +153,16 @@ void AGAME_PRODUCTION_IIICharacter::NotifyActorBeginOverlap(AActor*OtherActor)
 	  case false:
 	  IsLeaveingLadder = true // you can move side to side
 	  break;
-	
-	
-	
 	*/
 }
 void AGAME_PRODUCTION_IIICharacter::NotifyActorEndOverlap(AActor*OtherActor)
 {
-	// leave the ladder
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("overlap end happen"));
-	IsOnLadder = false;
-	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);// set to walking mode
-
-	
-	
-	
+	name = OtherActor->GetName();
+	if (name.Contains("Ladder"))
+	{
+		IsOnLadder = false;
+		// leave the ladder
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("overlap end happen"));
+	}
 }
