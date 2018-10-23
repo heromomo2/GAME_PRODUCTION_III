@@ -14,8 +14,6 @@ AGAME_PRODUCTION_IIICharacter::AGAME_PRODUCTION_IIICharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-	
-
 	// Don't rotate when the controller rotates.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -38,7 +36,7 @@ AGAME_PRODUCTION_IIICharacter::AGAME_PRODUCTION_IIICharacter()
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Face in the direction we are moving..
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f); // ...at this rotation rate
-	GetCharacterMovement()->GravityScale = 5.0f;
+	GetCharacterMovement()->GravityScale = 0.5f;
 	GetCharacterMovement()->AirControl = 0.5f;
 	GetCharacterMovement()->JumpZVelocity = 1000.f;
 	GetCharacterMovement()->GroundFriction = 3.f;
@@ -79,12 +77,11 @@ void AGAME_PRODUCTION_IIICharacter::MoveUpward(float value)
 	 // SetActorLocation(NewLocation);
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);// set to flying  mode
 	AddMovementInput(FVector::UpVector * value);
-	//if (GEngine)
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT(" you are flying")); 
-
+	 if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT(" You being flying")); 
     }
- //  else  
- //   {
+    //else  
+   // {
 	//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);// set to walking mode	
 	////if (GEngine)
 	////GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT(" you are walking"));
@@ -97,11 +94,11 @@ void AGAME_PRODUCTION_IIICharacter::MoveRight(float Value)
 {
 	// add movement in that direction
 
-	if ( !IsOnLadder || IsLeaveingLadder ) {
+	//if ( !IsOnLadder || IsLeaveingLadder ) {
 		//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);// set to walking mode	
-		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);// set to walking mode	
+		//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);// set to walking mode	
 		AddMovementInput(FVector::RightVector* Value);
-	}
+	//}
 	//else
 	//{
 	//	
@@ -124,8 +121,11 @@ void AGAME_PRODUCTION_IIICharacter::TouchStopped(const ETouchIndex::Type FingerI
 
 void AGAME_PRODUCTION_IIICharacter::NotifyActorBeginOverlap(AActor*OtherActor)
 {
+	IsOnLadder = true;
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("IsOnLadder: %s"), IsOnLadder ? TEXT("true") : TEXT("false")));
 	// eneter the ladder
-	name = OtherActor->GetName();
+	/*name = OtherActor->GetName();
 	if (OtherActor->IsA<ALadder>())//name.Contains("Ladder")) 
 	{
 		if (GEngine)
@@ -133,9 +133,7 @@ void AGAME_PRODUCTION_IIICharacter::NotifyActorBeginOverlap(AActor*OtherActor)
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, name);
 		}
 		IsOnLadder = true;
-	}
-
-
+	}*/
 	/* enter for the first time
 	  switch (IsLeaveingLadder) should be case false
 	  case true:
@@ -154,15 +152,22 @@ void AGAME_PRODUCTION_IIICharacter::NotifyActorBeginOverlap(AActor*OtherActor)
 	  IsLeaveingLadder = true // you can move side to side
 	  break;
 	*/
+
 }
 void AGAME_PRODUCTION_IIICharacter::NotifyActorEndOverlap(AActor*OtherActor)
 {
-	name = OtherActor->GetName();
+	IsOnLadder = false;
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);// set to walking mode
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Red, FString::Printf(TEXT("IsOnLadder: %s"), IsOnLadder ? TEXT("true") : TEXT("false")));
+
+	// leave the ladder
+	/*name = OtherActor->GetName();
 	if (name.Contains("Ladder"))
 	{
 		IsOnLadder = false;
 		// leave the ladder
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("overlap end happen"));
-	}
+	}*/
 }
